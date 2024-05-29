@@ -1,0 +1,18 @@
+.homework{
+.searchcontainer{
+margin:10px;
+float: left;
+}
+.addhomeworkContainer{
+    margin:10px;
+    float: right;
+}
+.container{
+   
+}
+
+}
+
+body {
+    background-color:lightgray;
+  }
