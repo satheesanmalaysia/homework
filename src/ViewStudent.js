@@ -11,7 +11,8 @@ import TopBar from "./Components/Topbar";
 import PrimaryButton from "./Components/PrimaryButton";
 import Table from "./Components/Table";
 import Pop from "./Components/Popover";
-import { UnorderedListOutlined } from "@ant-design/icons";
+import { CheckCircleTwoTone } from "@ant-design/icons";
+import AddStudent from "./AddStudent";
 
 const { Search } = Input;
 
@@ -24,11 +25,15 @@ const suffix = (
   />
 );
 
-
-
 function ViewStudent() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModal1Open, setIsModal1Open] = useState(false);
+  const openModal1 = () => setIsModal1Open(true);
+  const closeModal1 = () => {
+    console.log("Close Model");
+    setIsModal1Open(false);
+  };
   const columns = [
     {
       title: "Name",
@@ -40,7 +45,7 @@ function ViewStudent() {
     {
       title: "Email",
       dataIndex: "email",
-     },
+    },
     {
       title: "Invited Date",
       dataIndex: "invited_date",
@@ -50,34 +55,60 @@ function ViewStudent() {
       dataIndex: "status",
       // defaultSortOrder: 'descend',
       // sorter: (a, b) => a.age - b.age,
+      //   <CheckCircleTwoTone twoToneColor="#52c41a" />
+      render: (_, { status, id }) => (
+        <>
+          {status == "Completed" ? (
+            <>
+              <CheckCircleTwoTone twoToneColor="green" />
+              <label style={{ color: "green" }}> {status}</label>
+            </>
+          ) : status == "open" ? (
+            <>
+              <CheckCircleTwoTone twoToneColor="blue" />
+              <label> {status}</label>
+            </>
+          ) : (
+            <>
+              <CheckCircleTwoTone twoToneColor="grey" />
+              <label> {status}</label>
+            </>
+          )}
+        </>
+      ),
     },
     {
       title: "Action",
       dataIndex: "id",
-      render: (_, { status , id }) => (
+      render: (_, { status, id }) => (
         <>
           <Pop
             onClick={tableActionClick}
-            options={<>
-                {status == 'new' ? (
+            options={
               <>
-               
-                <a id={id} onClick={sendInvitationClicked}>
-                 Send Invitation
-                </a>{" "}
-                <br></br>{" "}
-                <a id={id} style={{ color: "red" }} onClick={deleteClick}>
-                  Delete
-                </a>
-              </>) : (
-              <>
-               
-              <a id={id} onClick={downloadClicked}>
-              Download Homework
-              </a>{" "}
-            </>)
-                }
-                </>
+                {status != "Completed" ? (
+                  <>
+                    <a id={id} onClick={sendInvitationClicked}>
+                      Send Invitation
+                    </a>{" "}
+                    <br></br>{" "}
+                    <a id={id} style={{ color: "red" }} onClick={deleteClick}>
+                      Delete
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <a
+                      id={id}
+                      download
+                      href="/sample.docx"
+                      onClick={downloadClicked}
+                    >
+                      Download Homework
+                    </a>{" "}
+                  </>
+                )}
+              </>
             }
           ></Pop>
         </>
@@ -106,29 +137,39 @@ function ViewStudent() {
   const filteredData = data.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "https://homework-be.onrender.com/api/students"
+      );
+      setData(response.data.data);
+    } catch (error) {
+      console.error("Error fetching the data", error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://homework-be.onrender.com/api/students"
-        );
-        setData(response.data.data);
-      } catch (error) {
-        console.error("Error fetching the data", error);
-      }
-    };
-
     fetchData();
-  }, []);
+  }, [isModal1Open]);
   function clicked() {
     console.log("onsearch");
   }
   function sendInvitationClicked(e) {
-    alert('Invitation Sent');
+    alert("Invitation Sent");
     console.log("sendInvitationClicked " + e.currentTarget.id);
   }
 
   function deleteClick(e) {
+    console.log("Delete " + e.currentTarget.id);
+    const url = `https://homework-be.onrender.com/api/students/${e.currentTarget.id}`;
+
+    axios
+      .delete(url)
+      .then((res) => {
+        fetchData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     console.log("Delete " + e.currentTarget.id);
   }
   function downloadClicked(e) {
@@ -162,10 +203,14 @@ function ViewStudent() {
           </Space>
         </div>
         <div className="addhomeworkContainer">
-          <PrimaryButton title="Add Student" onClick={clicked}></PrimaryButton>
+          <PrimaryButton
+            title="Add Student"
+            onClick={openModal1}
+          ></PrimaryButton>
         </div>
       </div>
       <Table data={filteredData} columns={columns}></Table>
+      <AddStudent isOpen={isModal1Open} onClose={closeModal1} />
     </div>
   );
 }
