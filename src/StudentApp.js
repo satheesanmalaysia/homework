@@ -200,7 +200,7 @@ function FirstComponent() {
     <div className="homework">
       <TopBar
         logoSrc="logo192.png"
-        logoText="Teacher App"
+        logoText="Student App"
         profilePicSrc="student.png"
         profileName="Student 1"
         ProfileRole="Student"

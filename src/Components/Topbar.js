@@ -65,7 +65,7 @@ const TopBar = ({
       
         <Logo src={logoSrc} alt="logo" />
         
-        <div style={{marginRight:'10px'}}> <Link to="/">{logoText}  </Link></div>
+        <div style={{marginRight:'10px'}}> {logoText==='Teacher App' ? <Link to="/teacher">{logoText}</Link> :<Link to="/student">{logoText}</Link>} </div>
        
        
       </LogoSection>
