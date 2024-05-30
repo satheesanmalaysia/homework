@@ -12,8 +12,9 @@ import PrimaryButton from "./Components/PrimaryButton";
 import Table from "./Components/Table";
 import Pop from "./Components/Popover";
 import { UnorderedListOutlined } from "@ant-design/icons";
-import { useNavigate } from 'react-router-dom';
-import Model from './AddHomework';
+import { useNavigate } from "react-router-dom";
+import Model from "./AddHomework";
+import EditModel from "./EditHomeWork";
 
 const { Search } = Input;
 
@@ -60,12 +61,22 @@ function FirstComponent() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModal1Open, setIsModal1Open] = useState(false);
+  const [isEdit, setEdit] = useState(false);
+  const [selectedID, setSelectedId] = useState("");
   const navigate = useNavigate();
   const openModal1 = () => setIsModal1Open(true);
-  const closeModal1 = () =>{ 
-console.log('Close Model');
-    setIsModal1Open(false)
-};
+  const closeModal1 = () => {
+    console.log("Close Model");
+    setIsModal1Open(false);
+    setEdit(false);
+    setSelectedId("");
+  };
+  const closeModal2 = () => {
+    console.log("Close Model");
+    setIsModal1Open(false);
+    setEdit(false);
+    setSelectedId("");
+  };
   const columns = [
     {
       title: "Title",
@@ -170,8 +181,6 @@ console.log('Close Model');
     }
   };
   useEffect(() => {
-   
-
     fetchData();
   }, [isModal1Open]);
   function clicked() {
@@ -179,10 +188,13 @@ console.log('Close Model');
   }
   function viewStudentClick(e) {
     console.log("View Studennt " + e.currentTarget.id);
-    navigate('/viewstudent')
+    navigate("/viewstudent");
   }
   function editClick(e) {
     console.log("edit " + e.currentTarget.id);
+    setIsModal1Open(true);
+    setEdit(true);
+    setSelectedId(e.currentTarget.id);
   }
   function deleteClick(e) {
     console.log("Delete " + e.currentTarget.id);
@@ -190,17 +202,16 @@ console.log('Close Model');
 
     axios
       .delete(url)
-      .then(res => {
+      .then((res) => {
         fetchData();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
   function tableActionClick() {
     console.log("Table Action Clicked");
   }
-
 
   //const onSearch = (value, _e, info) => console.log(info?.source, value);
   return (
@@ -225,11 +236,19 @@ console.log('Close Model');
           </Space>
         </div>
         <div className="addhomeworkContainer">
-          <PrimaryButton title="Add Homework" onClick={openModal1}></PrimaryButton>
+          <PrimaryButton
+            title="Add Homework"
+            onClick={openModal1}
+          ></PrimaryButton>
         </div>
       </div>
       <Table data={filteredData} columns={columns}></Table>
       <Model isOpen={isModal1Open} onClose={closeModal1} />
+      <EditModel
+        isOpen={isEdit}
+        onClose={closeModal1}
+        selectedID={selectedID}
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 // TopBar.js
-import React from 'react';
-import styled from 'styled-components';
-
+import React from "react";
+import styled from "styled-components";
+import { CheckCircleTwoTone } from "@ant-design/icons";
 const TopBarContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -9,7 +9,7 @@ const TopBarContainer = styled.div`
   padding: 0 20px;
   height: 60px;
   background-color: white;
-  color:black;
+  color: black;
   border-bottom: 2px solid grey;
 `;
 
@@ -50,7 +50,13 @@ const ProfileRole = styled.div`
   color: #ccc;
 `;
 
-const TopBar = ({ logoSrc, logoText, profilePicSrc, profileName, profileRole }) => {
+const TopBar = ({
+  logoSrc,
+  logoText,
+  profilePicSrc,
+  profileName,
+  profileRole,
+}) => {
   return (
     <TopBarContainer>
       <LogoSection>
@@ -58,6 +64,10 @@ const TopBar = ({ logoSrc, logoText, profilePicSrc, profileName, profileRole }) 
         <div>{logoText}</div>
       </LogoSection>
       <ProfileSection>
+        <CheckCircleTwoTone
+          style={{ margin: "3px", width: "15px", height: "15px" }}
+          twoToneColor="green"
+        />
         <ProfilePic src={profilePicSrc} alt="profile" />
         <ProfileInfo>
           <ProfileName>{profileName}</ProfileName>

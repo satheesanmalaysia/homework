@@ -15,5 +15,6 @@ float: left;
 
 body {
     background-color:lightgray;
+    z-index: 1;
   }
   

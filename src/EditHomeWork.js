@@ -19,13 +19,11 @@ const modalStyles = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
-    zIndex: "5",
   },
 };
 
 const formStyle = {
   margin: "10px",
-  zIndex: "5",
 };
 const margin = {
   margin: "8px",
@@ -44,31 +42,40 @@ const button_margin = {
   justifyContent: "space-around",
 };
 
-const ModalComponent1 = ({ isOpen, onClose }) => {
+const ModalComponent1 = ({ isOpen, onClose, selectedID }) => {
   const [name, setName] = useState("");
   const [subject, seSubject] = useState("");
   const [date, setDate] = useState("");
-  const [errors, setErrors] = useState({});
-  const handleNameChange = (e) => {
-    setErrors({});
-    setName(e.target.value);
-  };
+
+  const handleNameChange = (e) => setName(e.target.value);
   const handleSubjectChange = (e) => seSubject(e.target.value);
 
   const onDateChange = (date, dateString) => {
     console.log(date, dateString);
     setDate(dateString);
   };
+  const fetchData = async () => {
+    try {
+      console.log("Calling id " + selectedID);
+      const url = `https://homework-be.onrender.com/api/homeworks/${selectedID}`;
 
-  const validateInputs = () => {
-    let errors = {};
-    if (!name) errors.name = "Name is required";
-    if (!subject) errors.subject = "Subject is required";
-    if (!date) errors.date = "Date is required";
-    return errors;
+      const response = await axios.get(url);
+      console.log("Response---");
+      console.log(response.data.data.title);
+      setName(response.data.data.title);
+      seSubject(response.data.data.subject);
+      setDate(response.data.data.due_date);
+    } catch (error) {
+      console.error("Error fetching the data", error);
+    }
   };
-  const onSave = async () => {
-    console.log("Post call");
+
+  useEffect(() => {
+    fetchData();
+  }, [isOpen]);
+
+  const onEdit = async () => {
+    console.log("Update call");
     const data = {
       title: name,
       subject: subject,
@@ -77,63 +84,53 @@ const ModalComponent1 = ({ isOpen, onClose }) => {
       num_of_submissions: "2/20",
       homework_document: "https://via.placeholder.com/300",
     };
-    console.log("save action here" + name + subject + date);
-    const validationErrors = validateInputs();
-    if (Object.keys(validationErrors).length > 0) {
-      alert("Feilds are required");
-      setErrors(validationErrors);
-    } else {
-      setErrors({});
-      try {
-        const response = await axios.post(
-          "https://homework-be.onrender.com/api/homeworks",
-          data,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "*/*",
-            },
-          }
-        );
+    console.log("Update action here" + name + subject + date);
+    const url = `https://homework-be.onrender.com/api/homeworks/${selectedID}`;
+    try {
+      const response = await axios.put(url, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*",
+        },
+      });
 
-        if (response.data) {
-          console.log("save done");
-          onClose();
-        }
-      } catch (error) {
-        console.error("Error:", error);
+      if (response.data) {
+        console.log("update done");
+        onClose();
       }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
-
   function onCloseClicked() {
     console.log("Close ");
     seSubject("");
     setName("");
     setDate("");
     onClose();
-    setErrors({});
   }
   return (
     <Modal style={modalStyles} isOpen={isOpen} onRequestClose={onClose}>
-      <h2>Add HomeWork</h2>
+      <h2>Edit HomeWork</h2>
       <form>
         <div style={formStyle}>
           <label style={margin}>Title: </label> <br />
           <input
             type="text"
             name="name"
+            value={name}
             onChange={handleNameChange}
             style={margin}
           />
           <br />
-          {errors.name && (
-            <p style={{ color: "red", margin: "8px" }}>{errors.name}</p>
-          )}
           <label style={margin}>
             Subject:
             <br />
-            <select style={option} onChange={handleSubjectChange}>
+            <select
+              style={option}
+              value={subject}
+              onChange={handleSubjectChange}
+            >
               <option value="" disabled>
                 Select an option
               </option>
@@ -141,9 +138,6 @@ const ModalComponent1 = ({ isOpen, onClose }) => {
               <option value="history">History</option>
               <option value="mathemetics">Mathemetics</option>
             </select>
-            {errors.subject && (
-              <p style={{ color: "red", margin: "8px" }}>{errors.subject}</p>
-            )}
           </label>
           <br />
           <label style={margin}>Upload Homework Document </label> <br />
@@ -153,12 +147,11 @@ const ModalComponent1 = ({ isOpen, onClose }) => {
           <label style={margin}>Due Date </label> <br />
           <div style={margin}>
             <Picker onClick={onDateChange}></Picker>
-            {errors.name && <p style={{ color: "red" }}>{errors.date}</p>}
           </div>
         </div>
       </form>
       <Flex style={button_margin} gap="small" wrap>
-        <Button style={margin} type="primary" onClick={onSave}>
+        <Button style={margin} type="primary" onClick={onEdit}>
           Save
         </Button>
         <Button
