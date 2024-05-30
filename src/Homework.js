@@ -12,6 +12,8 @@ import PrimaryButton from "./Components/PrimaryButton";
 import Table from "./Components/Table";
 import Pop from "./Components/Popover";
 import { UnorderedListOutlined } from "@ant-design/icons";
+import { useNavigate } from 'react-router-dom';
+import Model from './AddHomework';
 
 const { Search } = Input;
 
@@ -57,6 +59,13 @@ const suffix = (
 function FirstComponent() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModal1Open, setIsModal1Open] = useState(false);
+  const navigate = useNavigate();
+  const openModal1 = () => setIsModal1Open(true);
+  const closeModal1 = () =>{ 
+console.log('Close Model');
+    setIsModal1Open(false)
+};
   const columns = [
     {
       title: "Title",
@@ -103,9 +112,27 @@ function FirstComponent() {
     },
     {
       title: "Action",
-      render: (_, { subject }) => (
+      dataIndex: "id",
+      render: (_, { id }) => (
         <>
-          <Pop onClick={tableActionClick}></Pop>
+          <Pop
+            onClick={tableActionClick}
+            options={
+              <>
+                <a id={id} onClick={viewStudentClick}>
+                  View Student
+                </a>{" "}
+                <br></br>{" "}
+                <a id={id} onClick={editClick}>
+                  Edit
+                </a>{" "}
+                <br></br>{" "}
+                <a id={id} style={{ color: "red" }} onClick={deleteClick}>
+                  Delete
+                </a>
+              </>
+            }
+          ></Pop>
         </>
       ),
 
@@ -132,26 +159,48 @@ function FirstComponent() {
   const filteredData = data.filter((item) =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "https://homework-be.onrender.com/api/homeworks"
+      );
+      setData(response.data.data);
+    } catch (error) {
+      console.error("Error fetching the data", error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://homework-be.onrender.com/api/homeworks"
-        );
-        setData(response.data.data);
-      } catch (error) {
-        console.error("Error fetching the data", error);
-      }
-    };
+   
 
     fetchData();
-  }, []);
+  }, [isModal1Open]);
   function clicked() {
     console.log("onsearch");
   }
-  function tableActionClick(e) {
-    console.log("table action click " + e);
+  function viewStudentClick(e) {
+    console.log("View Studennt " + e.currentTarget.id);
+    navigate('/viewstudent')
   }
+  function editClick(e) {
+    console.log("edit " + e.currentTarget.id);
+  }
+  function deleteClick(e) {
+    console.log("Delete " + e.currentTarget.id);
+    const url = `https://homework-be.onrender.com/api/homeworks/${e.currentTarget.id}`;
+
+    axios
+      .delete(url)
+      .then(res => {
+        fetchData();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+  function tableActionClick() {
+    console.log("Table Action Clicked");
+  }
+
 
   //const onSearch = (value, _e, info) => console.log(info?.source, value);
   return (
@@ -167,7 +216,7 @@ function FirstComponent() {
         <div className="searchcontainer">
           <Space direction="vertical">
             <Search
-              placeholder="input search text"
+              placeholder="Search for title"
               onSearch={handleSearchChange}
               style={{
                 width: 200,
@@ -176,10 +225,11 @@ function FirstComponent() {
           </Space>
         </div>
         <div className="addhomeworkContainer">
-          <PrimaryButton title="Add Homework" onClick={clicked}></PrimaryButton>
+          <PrimaryButton title="Add Homework" onClick={openModal1}></PrimaryButton>
         </div>
       </div>
       <Table data={filteredData} columns={columns}></Table>
+      <Model isOpen={isModal1Open} onClose={closeModal1} />
     </div>
   );
 }
