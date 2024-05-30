@@ -1,0 +1,32 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .login-box {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .login-box input {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    width: 200px;
+  }
+  
+  .login-box button {
+    padding: 10px 20px;
+  }
+  

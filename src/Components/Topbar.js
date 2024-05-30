@@ -2,6 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 import { CheckCircleTwoTone } from "@ant-design/icons";
+import { Link } from 'react-router-dom';
 const TopBarContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -59,9 +60,14 @@ const TopBar = ({
 }) => {
   return (
     <TopBarContainer>
+      
       <LogoSection>
+      
         <Logo src={logoSrc} alt="logo" />
-        <div>{logoText}</div>
+        
+        <div style={{marginRight:'10px'}}> <Link to="/">{logoText}  </Link></div>
+       
+       
       </LogoSection>
       <ProfileSection>
         <CheckCircleTwoTone
@@ -71,9 +77,10 @@ const TopBar = ({
         <ProfilePic src={profilePicSrc} alt="profile" />
         <ProfileInfo>
           <ProfileName>{profileName}</ProfileName>
-          <ProfileRole>Teacher</ProfileRole>
+          <ProfileRole>Role</ProfileRole>
         </ProfileInfo>
       </ProfileSection>
+     
     </TopBarContainer>
   );
 };
