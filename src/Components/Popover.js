@@ -20,6 +20,7 @@ function App({ onClick ,options }) {
       trigger="click"
       open={open}
       onOpenChange={handleOpenChange}
+      onChange ={onClick}
     >
       <Button type="primary">
         <UnorderedListOutlined />

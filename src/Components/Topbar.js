@@ -77,7 +77,7 @@ const TopBar = ({
         <ProfilePic src={profilePicSrc} alt="profile" />
         <ProfileInfo>
           <ProfileName>{profileName}</ProfileName>
-          <ProfileRole>Role</ProfileRole>
+          <ProfileRole>Role {profileRole}</ProfileRole>
         </ProfileInfo>
       </ProfileSection>
      

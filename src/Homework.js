@@ -27,35 +27,6 @@ const suffix = (
   />
 );
 
-//   const data = [
-//     {
-//       id: 1,
-//       title: "test",
-//       subject: "history",
-//       invited_date: "28/05/2024",
-//       due_date: "30/05/2024",
-//       num_of_submissions: "2/5",
-//       homework_document: "just a url",
-//     },
-//     {
-//       id: 2,
-//       title: "Science Homework",
-//       subject: "science",
-//       invited_date: "28/05/2024",
-//       due_date: "05/06/2024",
-//       num_of_submissions: "4/5",
-//       homework_document: "just a url",
-//     },
-//     {
-//       id: 3,
-//       title: "Maths Homework",
-//       subject: "mathemetics",
-//       invited_date: "28/05/2024",
-//       due_date: "05/06/2024",
-//       num_of_submissions: "2/5",
-//       homework_document: "just a url",
-//     },
-//   ];
 
 function FirstComponent() {
   const [data, setData] = useState([]);

@@ -93,6 +93,21 @@ function FirstComponent() {
           </Tag>
         </>
       ),
+      filters: [
+        {
+          text: "history",
+          value: "history",
+        },
+        {
+          text: "science",
+          value: "science",
+        },
+        {
+          text: "mathemetics",
+          value: "mathemetics",
+        },
+      ],
+      onFilter: (value, record) => record.subject.indexOf(value) === 0,
     },
     {
       title: "Due Date",
@@ -167,9 +182,9 @@ function FirstComponent() {
     setSearchTerm(value);
   };
 
-//   const filteredData = data.filter((item) =>
-//     item.title.toLowerCase().includes(searchTerm.toLowerCase())
-//   );
+  const filteredData = data.filter((item) =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -219,7 +234,7 @@ function FirstComponent() {
         </div>
        
       </div>
-      <Table data={data} columns={columns}></Table>
+      <Table data={filteredData} columns={columns}></Table>
     </div>
   );
 }

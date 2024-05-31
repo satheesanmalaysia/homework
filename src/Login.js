@@ -17,10 +17,10 @@ const Login = () => {
   const [error, setError] = useState('');
 
   const handleLogin = () => {
-    if (username === 'student' && password === 'student') {
+    if (username.toLowerCase() === 'student' && password.toLowerCase() === 'student') {
       setRole('student');
       setError('');
-    } else if (username === 'teacher' && password === 'teacher') {
+    } else if (username.toLowerCase() === 'teacher' && password.toLowerCase() === 'teacher') {
       setRole('teacher');
       setError('');
     } else {
@@ -39,8 +39,9 @@ const Login = () => {
     <div className="login-container">
       <div className="login-box">
         <h2>Login</h2>
-        <p>Teacher Login credentials- teacher/teacher</p>
-        <p>Student Login credentials- student/student</p>
+        <p>This is a static Login page for rolebased redirection</p>
+        <p>Teacher Login credentials-<span style={{color:'red'}}> teacher/teacher</span></p>
+        <p>Student Login credentials- <span style={{color:'red'}}>student/student</span></p>
         <div>
           <input
             type="text"

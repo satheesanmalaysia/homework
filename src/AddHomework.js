@@ -6,16 +6,16 @@ import Picker from "./Components/DatePicker";
 import DropDown from "./Components/DropDown";
 import axios from "axios";
 import { useState, useEffect } from "react";
-
+import "./CSS/Homework.css";
 import { Button, Flex } from "antd";
 
 Modal.setAppElement("#root");
 const modalStyles = {
   content: {
     height: "500px",
-    width: "400px",
+    width: "500px",
     margin: "auto", // Center the modal
-    padding: "20px",
+    padding: "10px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
@@ -26,6 +26,8 @@ const modalStyles = {
 const formStyle = {
   margin: "10px",
   zIndex: "5",
+  position: 'relative'
+  
 };
 const margin = {
   margin: "8px",

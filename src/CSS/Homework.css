@@ -13,8 +13,6 @@ float: left;
 
 }
 
-body {
-    background-color:lightgray;
-    z-index: 1;
-  }
-  
+.ant-table-column-title {
+    z-index: 0;
+}
