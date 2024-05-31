@@ -134,8 +134,10 @@ function ViewStudent() {
     setSearchTerm(value);
   };
 
-  const filteredData = data.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredData = data.filter((item) => {
+  
+    return item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  }
   );
   const fetchData = async () => {
     try {
