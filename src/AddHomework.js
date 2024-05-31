@@ -20,13 +20,15 @@ const modalStyles = {
     flexDirection: "column",
     justifyContent: "flex-start",
     zIndex: "5",
+    
   },
 };
 
 const formStyle = {
   margin: "10px",
   zIndex: "5",
-  position: 'relative'
+  position: 'relative',
+  color:'black'
   
 };
 const margin = {

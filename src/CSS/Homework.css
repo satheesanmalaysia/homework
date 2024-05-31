@@ -16,3 +16,6 @@ float: left;
 .ant-table-column-title {
     z-index: 0;
 }
+.ant-table-wrapper .ant-table-column-title {
+    z-index: 0;
+}

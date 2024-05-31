@@ -3,13 +3,18 @@ import React from "react";
 import styled from "styled-components";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { Link } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import { lightTheme, darkTheme } from '../theme';
+import { GlobalStyles } from '../Globalstyle';
+import ThemeToggle from '../ThemeToggle';
+import { useState, useEffect } from "react";
 const TopBarContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
   height: 60px;
-  background-color: white;
+
   color: black;
   border-bottom: 2px solid grey;
 `;
@@ -58,6 +63,11 @@ const TopBar = ({
   profileName,
   profileRole,
 }) => {
+  const [theme, setTheme] = useState('light');
+
+  const toggleTheme = () => {
+      theme === 'light' ? setTheme('dark') : setTheme('light');
+  }
   return (
     <TopBarContainer>
       
@@ -69,11 +79,19 @@ const TopBar = ({
        
        
       </LogoSection>
+
       <ProfileSection>
+      <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+            <GlobalStyles />  Theme  
+            <div>
+               <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+            </div>
+        </ThemeProvider>
         <CheckCircleTwoTone
           style={{ margin: "3px", width: "15px", height: "15px" }}
           twoToneColor="green"
         />
+         
         <ProfilePic src={profilePicSrc} alt="profile" />
         <ProfileInfo>
           <ProfileName>{profileName}</ProfileName>
