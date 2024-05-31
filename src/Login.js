@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CSS/Login.css'; // Import the CSS file
 import Homework from './Homework'
 import Student from './StudentApp'
-const StudentComponent = () => {
-  return <div>Welcome, Student!</div>;
-};
+import axios from "axios";
 
-const TeacherComponent = () => {
-  return <div>Welcome, Teacher!</div>;
+// Making this call to initiate the render server , first call on render server will be very slow.
+const fetchData = async () => {
+  try {
+    const response = await axios.get(
+      "https://homework-be.onrender.com/api/homeworks"
+    );
+   console.log(response);
+  } catch (error) {
+    console.error("Error fetching the data", error);
+  }
 };
 
 const Login = () => {
@@ -15,7 +21,9 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState(null);
   const [error, setError] = useState('');
-
+  useEffect(() => {
+    fetchData();
+  }, []);
   const handleLogin = () => {
     if (username.toLowerCase() === 'student' && password.toLowerCase() === 'student') {
       setRole('student');
